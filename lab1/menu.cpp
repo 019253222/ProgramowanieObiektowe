@@ -6,7 +6,7 @@ void wyswietl_menu ()
 
 }
 
-int pcja()
+int opcja()
 {
 
 }
