@@ -8,165 +8,231 @@ using namespace std;
 
 
 
-void wyswietl_tablice(Tablica arr) {
-	for(int x=0; x<arr.wiersz; x++){
-		for(int y=0; y<arr.kolumna; y++){
-			cout << arr.tablica[x][y] << "\t";
-		}
-		cout << endl;
-	}
-}
 
-void zmiana_komorki(Tablica arr, int komorka_wiersza, int komorka_kolumny, int nowe) {
+int zmiana_komorki(Tablica arr, int komorka_wiersza, int komorka_kolumny, int nowe) {
+
+	if(komorka_wiersza>arr.wiersz || komorka_kolumny>arr.kolumna){
+		return -1;
+	}
 
 	arr.tablica[komorka_wiersza-1][komorka_kolumny-1]=nowe;
-
-}
-
-
-int** zmiana_rozmiaru (Tablica* arr, int new_wiersz, int new_kolumna) {
-
-	return 0;	
+	return 0;
 }
 
 
 
+void zmiana_rozmiaru (Tablica & arr, int nowy_wiersz, int nowa_kolumna) {
+	int ** tab=new int*[nowy_wiersz];
 
-void zapisywanie_pliku(Tablica arr){
-	ofstream zapis_pliku;
-	zapis_pliku.open("nowa_tablica.txt");
-	
-	zapis_pliku<<arr.wiersz << endl;
-	zapis_pliku<<arr.kolumna << endl;
-	
-	for(int x=0; x<arr.wiersz; x++){
-		for(int y=0; y<arr.kolumna; y++){
-			zapis_pliku<<arr.tablica[x][y]<<"\t";
+	for(int i=0; i<nowy_wiersz; i++){
+		tab[i]=new int[nowa_kolumna];
 		}
-		zapis_pliku<< endl;
+
+	for(int x=0; x<nowy_wiersz; x++){
+		for(int y=0; y<nowa_kolumna; y++){
+			tab[x][y]=0;
+		}
 	}
-	zapis_pliku.close();
+	if(arr.wiersz>nowy_wiersz || arr.kolumna>nowa_kolumna){
+		for(int x=0; x<nowy_wiersz; x++){
+			for(int y=0; y<nowa_kolumna; y++){
+				tab[x][y]=arr.tablica[x][y];
+				}
+			}
+		}
+		else{
+			for(int x=0; x<arr.wiersz; x++){
+				for(int y=0; y<arr.kolumna; y++){
+					tab[x][y]=arr.tablica[x][y];
+				}
+			}
+		}
+		for(int x=0; x<arr.kolumna; x++){
+			delete[] arr.tablica[x];
+		}
+
+	delete[] arr.tablica;
+	
+	arr.tablica= tab;
+	arr.wiersz= nowy_wiersz;
+	arr.kolumna= nowa_kolumna;
+}	
+
+
+
+
+
+
+int zapisywanie_pliku(Tablica arr){
+	ofstream zapis_pliku;
+	if(zapis_pliku.good()==true){
+		zapis_pliku.open("nowa_tablica.txt");
+	
+		zapis_pliku<<arr.wiersz << endl;
+		zapis_pliku<<arr.kolumna << endl;
+	
+		for(int x=0; x<arr.wiersz; x++){
+			for(int y=0; y<arr.kolumna; y++){
+				zapis_pliku<<arr.tablica[x][y]<<"\t";
+			}
+			zapis_pliku<< endl;
+		}
+		zapis_pliku.close();
+		return 0;
+	}
+	else{
+		return -1;
+	}
 }
 
-void odczytywanie_pliku(Tablica* arr){
+int odczytywanie_pliku(Tablica* arr){
 	ifstream odczyt_pliku;
 	odczyt_pliku.open("tablica.txt");
+	if(odczyt_pliku.good()==true){
 	
-	odczyt_pliku >> arr->wiersz;
-	odczyt_pliku >> arr->kolumna;
-	arr->tablica = new int* [arr->wiersz];
-	for(int i=0; i<arr->wiersz; i++){
-		arr->tablica[i] = new int [arr->kolumna];
-	}
-	for(int x=0; x<arr->wiersz; x++) {
-		for(int y=0; y<arr->kolumna; y++){
-			odczyt_pliku >> arr->tablica[x][y];
+		odczyt_pliku >> arr->wiersz;
+		odczyt_pliku >> arr->kolumna;
+		arr->tablica = new int* [arr->wiersz];
+		for(int i=0; i<arr->wiersz; i++){
+			arr->tablica[i] = new int [arr->kolumna];
 		}
+		for(int x=0; x<arr->wiersz; x++) {
+			for(int y=0; y<arr->kolumna; y++){
+				odczyt_pliku >> arr->tablica[x][y];
+			}
+		}
+		odczyt_pliku.close();
+		return 0;
 	}
-	odczyt_pliku.close();
+	else{
+		return -1;
+	}
 }
 
+int sumowanie_wierszy(Tablica arr, int numer_wiersza){
 
-void sumowanie_wierszy(Tablica arr){
-	cout << "Który wiersz chcesz zsumowac?" << endl;
-	int numer_wiersza;
-	cin >> numer_wiersza;
+	if(numer_wiersza>arr.wiersz){
+		return -1;
+	}
+
 	int suma_wierszy = 0;
 	for(int i=0; i<arr.kolumna; i++){
 		suma_wierszy+=arr.tablica[numer_wiersza-1][i];
 	}
-	cout << "Wynik sumowania wiersza rowna sie" << suma_wierszy << endl;
+	cout << "Wynik sumowania wiersza rowna sie: " << suma_wierszy << endl;
+	return 0;
 }
 
-void sumowanie_kolumn(Tablica arr){
-	cout << "Którą kolumne chcesz zsumowac?" << endl;
-	int numer_kolumny = 0;
-	cin >> numer_kolumny;
+int sumowanie_kolumn(Tablica arr, int numer_kolumny){
+
+	if(numer_kolumny>arr.kolumna){
+		return -1;
+	}	
+
 	int suma_kolumn = 0;
 	for(int i=0; i<arr.wiersz; i++){
 		suma_kolumn+= arr.tablica[i][numer_kolumny-1];
 	}
-	cout << "Wynik sumowania kolumny rowna sie" << suma_kolumn << endl;
+	cout << "Wynik sumowania kolumny rowna sie: " << suma_kolumn << endl;
+	return 0;
 }
 
-void minimum_kolumn(Tablica arr){
-	cout << "Która kolumne chcsz poddac analizie ?"<<endl;
-	int numer_kolumny = 0;
-	cin >> numer_kolumny;
+int minimum_kolumn(Tablica arr, int numer_kolumny){
+	
+	if(numer_kolumny>arr.kolumna){
+		return -1;
+	}
+
 	int kolumna_minimum = arr.tablica[0][numer_kolumny-1];
 	for(int i=0; i<arr.wiersz; i++){
 		if(kolumna_minimum>arr.tablica[i][numer_kolumny-1]){
 			kolumna_minimum = arr.tablica[i][numer_kolumny-1];
 		}
 	}
-	cout << "Najmniejsza wartosc w kolumnie to :" << kolumna_minimum << endl;
+	cout << "Najmniejsza wartosc w kolumnie to : " << kolumna_minimum << endl;
+	return 0;
 }
 
 
-void minimum_wierszy(Tablica arr){
-	cout << "Który wiersz chcesz poddać analizie ?"<< endl;
-	int numer_wiersza = 0;
-	cin >> numer_wiersza;
+int minimum_wierszy(Tablica arr, int numer_wiersza){
+	
+	if(numer_wiersza>arr.wiersz){
+		return -1;
+	}
+
 	int wiersz_minimum = arr.tablica[numer_wiersza-1][0];
 	for(int i=0; i<arr.kolumna; i++){
 		if(wiersz_minimum>arr.tablica[numer_wiersza-1][i]){
 			wiersz_minimum = arr.tablica[numer_wiersza-1][i];
 		}
 	}
-	cout << "Najmniejsza wartosc w wierszu to :" << wiersz_minimum << endl;
+	cout << "Najmniejsza wartosc w wierszu to : " << wiersz_minimum << endl;
+	return 0;
 }
 
-void maximum_kolumny(Tablica arr){
-	cout << "Który wiersz chcesz poddać analizie?" << endl;
-	int numer_kolumny = 0;
-	cin >> numer_kolumny;
+int maximum_kolumny(Tablica arr, int numer_kolumny){
+
+	if(numer_kolumny>arr.kolumna){
+		return -1;
+	}
+
 	int kolumna_maximum = arr.tablica[0][numer_kolumny-1];
 	for(int i=0; i<arr.wiersz; i++){
 		if(kolumna_maximum<arr.tablica[i][numer_kolumny-1]){
 			kolumna_maximum = arr.tablica[i][numer_kolumny-1];
 		}
 	}
-	cout << "Najwieksza wartosc w kolumnie to:" << kolumna_maximum << endl;
+	cout << "Najwieksza wartosc w kolumnie to: " << kolumna_maximum << endl;
+	return 0;
 }
 
 
-void maximum_wierszy(Tablica arr){
-	cout << "Który wiersz chcesz poddać analizie?" << endl;
-	int numer_wiersza=0;
-	cin >> numer_wiersza;
+int maximum_wierszy(Tablica arr, int numer_wiersza){
+
+	if(numer_wiersza>arr.wiersz){
+		return -1;
+	}
+
 	int wiersz_maximum = arr.tablica[numer_wiersza-1][0];
 	for(int i=0; i<arr.kolumna; i++){
 		if(wiersz_maximum<arr.tablica[numer_wiersza-1][i]){
 			wiersz_maximum = arr.tablica[numer_wiersza-1][i];
 		}
 	}
-	cout<< "Najwieksza wartosc w wierszu to:" << wiersz_maximum << endl;
+	cout<< "Najwieksza wartosc w wierszu to: " << wiersz_maximum << endl;
+	return 0;
 }
 
-void srednia_kolumn(Tablica arr){
-	cout << "Z jakiej kolumny obliczyc wartosc srednia" << endl;
-	int numer_kolumny = 0;
-	cin >> numer_kolumny;
-	int suma_kolumn = 0;
+int srednia_kolumn(Tablica arr, int numer_kolumny){
+
+	if(numer_kolumny>arr.kolumna){
+		return -1;
+	}
+
+	float suma_kolumn = 0;
 	for(int i=0; i<arr.wiersz; i++){
 		suma_kolumn+= arr.tablica[i][numer_kolumny-1];
 	}
-	int kolumna_srednia = suma_kolumn/arr.wiersz;
+	float kolumna_srednia = suma_kolumn/arr.wiersz;
 	
-	cout << "Srednia kolumny wynosi" << kolumna_srednia << endl;
+	cout << "Srednia kolumny wynosi: " << kolumna_srednia << endl;
+	return 0;
 }
 
-void srednia_wierszy(Tablica arr){
-	cout << "Z jakiego wiersza obliczyc wartosc srednia?" << endl;
-	int numer_wiersza = 0;
-	cin >> numer_wiersza;
-	int suma_wierszy = 0;
+int srednia_wierszy(Tablica arr, int numer_wiersza){
+
+	if(numer_wiersza>arr.wiersz){
+		return -1;
+	}
+
+	float suma_wierszy = 0;
 	for(int i=0; i<arr.kolumna; i++){
 		suma_wierszy+= arr.tablica[numer_wiersza-1][i];
 	}
-	int wiersz_srednia = suma_wierszy/arr.kolumna;
+	float wiersz_srednia = suma_wierszy/arr.kolumna;
 	
-	cout << "Srednia wiersza wynosi" << wiersz_srednia << endl;
+	cout << "Srednia wiersza wynosi: " << wiersz_srednia << endl;
+	return 0;
 }
 		
 

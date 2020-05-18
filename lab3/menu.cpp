@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tablica.h"
 #include "menu.h"
+#include "tablica_wysw.h"
 
 using namespace std;
 
@@ -38,8 +39,11 @@ void informacja_zwrotna(int nr_informacji, Tablica &arr) {
 	int komorka_wiersza = 0;
 	int komorka_kolumny = 0;
 	int nowe = 0;
-	int new_wiersz = 0;
-	int new_kolumna = 0;
+	int nowy_wiersz = 0;
+	int nowa_kolumna = 0;
+	int numer_wiersza = 0;
+	int numer_kolumny = 0;
+	int err = 0;
 
 	switch(nr_informacji) {
 
@@ -49,7 +53,12 @@ void informacja_zwrotna(int nr_informacji, Tablica &arr) {
 
 		case 1:
 			cout << "Wczytywanie tablicy z pliku ... " << endl;
-			odczytywanie_pliku(&arr);
+			err = odczytywanie_pliku(&arr);
+			
+			if(err){
+				cout << "Wystapil blad przy wczytywaniu tablicy" << endl;
+			}
+
 			break;
 
 		case 2:
@@ -65,48 +74,105 @@ void informacja_zwrotna(int nr_informacji, Tablica &arr) {
 			cin >> komorka_kolumny;
 			cout << "Podaj nowa wartość" << endl;
 			cin >> nowe;
-			zmiana_komorki(arr, komorka_wiersza, komorka_kolumny, nowe);			
+			err = zmiana_komorki(arr, komorka_wiersza, komorka_kolumny, nowe);	
+
+			if(err){
+				cout << "Bledna wartosc komorki" << endl;
+			}
+		
 			break;
 
 		case 4:
 			cout << "Jaki ma byc nowy rozmiar tablicy: " << endl;
-			cin >> new_wiersz;
-			cin >> new_kolumna;
-			zmiana_rozmiaru(&arr, new_wiersz, new_kolumna);			
+			cout << "Wiersze: " << endl;
+			cin >> nowy_wiersz;
+			cout << "Kolumny: " << endl;
+			cin >> nowa_kolumna;
+			zmiana_rozmiaru(arr, nowy_wiersz, nowa_kolumna);			
 			
 			break;
 		case 5:
 			cout << "Sumowanie po kolumnach" << endl;
-			sumowanie_kolumn(arr);
+			cout << "Którą kolumne chcesz zsumowac?" << endl;
+			cin >> numer_kolumny;
+			err = sumowanie_kolumn(arr, numer_kolumny);
+
+			if(err){
+				cout << "Bledne wskazanie kolumny" << endl;
+			}	
 			break;
 		case 6:
 			cout << "Sumowanie po wierszach" << endl;
-			sumowanie_wierszy(arr);			
+			cout << "Który wiersz chcesz zsumowac?" << endl;
+			cin >> numer_wiersza;
+			err = sumowanie_wierszy(arr, numer_wiersza);
+	
+			if(err){
+				cout << "Bledne wskazanie wiersza" << endl;
+			}		
 			break;
 		
 		case 7: 
 			cout << "Wartosc najmniejsza w kolumnie" << endl;
-			minimum_kolumn(arr);
+			cout << "Która kolumne chcsz poddac analizie ?"<<endl;
+			cin >> numer_kolumny;
+			err = minimum_kolumn(arr, numer_kolumny);
+
+			if(err){
+				cout << "Bledne wskazanie kolumny" << endl;
+			}		
 			break;
+
+
 		case 8: 
 			cout << "Wartosc najmniejsza w wierszu" << endl;
-			minimum_wierszy(arr);
+			cout << "Który wiersz chcesz poddać analizie ?"<< endl;
+			cin >> numer_wiersza;
+			err = minimum_wierszy(arr, numer_wiersza);
+
+			if(err){
+				cout << "Bledne wskazanie wiersza" << endl;
+			}		
 			break;	
 		case 9: 
 			cout << "Wartosc najwieksza w kolumnie" << endl;
-			maximum_kolumny(arr);
+			cout << "Który wiersz chcesz poddać analizie?" << endl;
+			cin >> numer_kolumny;			
+			err = maximum_kolumny(arr, numer_kolumny);
+
+			if(err){
+				cout << "Bledne wskazanie kolumny" << endl;
+			}		
 			break;	
 		case 10: 
 			cout << "Wartosc najwieksza w wierszu" << endl;
-			maximum_wierszy(arr);
+			cout << "Który wiersz chcesz poddać analizie?" << endl;
+			cin >> numer_wiersza;
+			err = maximum_wierszy(arr, numer_wiersza);
+
+			if(err){
+				cout << "Bledne wskazanie wiersza" << endl;
+			}	
 			break;
 		case 11: 
 			cout << "Wartosc srednia w kolumnie" << endl;
-			srednia_kolumn(arr);
+			cout << "Z jakiej kolumny obliczyc wartosc srednia" << endl;
+			cin >> numer_kolumny;
+			err = srednia_kolumn(arr, numer_kolumny);
+
+			if(err){
+				cout << "Bledne wskazanie kolumny" << endl;
+			}		
 			break;	
 		case 12: 
 			cout << "Wartosc srednia w wierszu" << endl;
-			srednia_wierszy(arr);
+			cout << "Z jakiego wiersza obliczyc wartosc srednia?" << endl;
+			cin >> numer_wiersza;
+			err = srednia_wierszy(arr, numer_wiersza);
+
+			if(err){
+				cout << "Bledne wskazanie wiersza" << endl;
+			}		
 			break;	
 		case 13: 
 			cout << "Zapisanie pliku" << endl;
