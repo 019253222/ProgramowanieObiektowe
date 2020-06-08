@@ -1,0 +1,7 @@
+4
+4
+int 	string 	string 	int 	
+13 	jest 	nie 	0 	
+11 	chyba 	lub 	0 	
+12 	moze 	albo 	0 	
+0 	nic 	nic 	0 	

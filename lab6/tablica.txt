@@ -1,0 +1,7 @@
+3
+3
+int string string
+10 tak nie
+11 chyba lub
+12 moze albo
+
